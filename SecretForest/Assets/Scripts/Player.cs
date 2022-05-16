@@ -4,36 +4,21 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    #region Public
-    #endregion
-    #region Serialize Field
+    [Header("Player Movement")]
     [SerializeField] private float moveSpeed;
-    [SerializeField] private float sprintSpeedModifier;
-    #endregion
-    #region Private
-
-    #region Movements
     private float yInput;
     private float xInput;
-    private float oldSpeed;
-    private float sprintSpeed;
-    #endregion
 
-    private bool sprintActive;
-
-    #endregion
-    #region Compononent
+    [Header("Components")]
     Rigidbody2D rb;
-    #endregion
-
-
-
+    [HideInInspector] public StaminaController _staminaController;
+    
+    
     #region Defaults
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-
-        GetSprintSpeed();
+        _staminaController = GetComponent<StaminaController>();
     }
 
     private void Update()
@@ -51,6 +36,8 @@ public class Player : MonoBehaviour
 
 
     #region Functions
+
+    #region Movement
     private void GetInput()
     {
         yInput = Input.GetAxis("Vertical");
@@ -64,25 +51,37 @@ public class Player : MonoBehaviour
         rb.velocity = vectorMove;
     }
 
+    public void SetRunSpeed(float speed)
+    {
+        moveSpeed = speed;
+    }
+
     private void Sprint()
     {
         if (Input.GetKey(KeyCode.LeftShift))
         {
-            moveSpeed = sprintSpeed;
-            sprintActive = true;
+            _staminaController.weAreSprinting = true;
+            _staminaController.Sprinting();
         }
         else
         {
-            moveSpeed = oldSpeed;
-            sprintActive = false;
+            _staminaController.weAreSprinting = false;
         }
     }
-    private void GetSprintSpeed()
-    {
-        oldSpeed = moveSpeed;
-        sprintSpeed = moveSpeed * sprintSpeedModifier;
-    }
+    #endregion
+
+    
+
 
     #endregion
 
 }
+
+   
+
+
+
+    
+    
+
+
