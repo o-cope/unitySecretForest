@@ -39,6 +39,7 @@ public class StaminaController : MonoBehaviour
     {
         if (!weAreSprinting)
         {
+            playerController.SetRunSpeed(moveSpeed);
             if(playerStamina <= maxStamina - 0.01)
             {
                 playerStamina += staminaRegen * Time.deltaTime;
